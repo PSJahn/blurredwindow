@@ -1,0 +1,21 @@
+{
+	"schemaVersion": 1,
+	"id": "blurredwindow",
+	"version": "${version}",
+	"name": "BlurredWindow",
+	"description": "Applies an Acrylic effect to the background of the Minecraft window",
+	"authors": [
+		"PSJahn"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/blurredwindow/icon.png",
+	"environment": "*",
+	"mixins": [
+		"blurredwindow.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": ">=1.20",
+		"java": ">=21"
+	}
+}
