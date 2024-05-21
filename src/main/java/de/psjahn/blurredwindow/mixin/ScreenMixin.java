@@ -15,12 +15,12 @@ public class ScreenMixin {
     @Shadow @Nullable protected MinecraftClient client;
 
     @Inject(method = "renderPanoramaBackground", at = @At("HEAD"), cancellable = true)
-    private void injectRenderPanoramaBackground(CallbackInfo info) {
+    private void removeBackground(CallbackInfo info) {
         if(!client.getWindow().isFullscreen()) info.cancel();
     }
 
     @Inject(method = "renderDarkening(Lnet/minecraft/client/gui/DrawContext;IIII)V", at = @At("HEAD"), cancellable = true)
-    private void injectRenderDarkening(CallbackInfo info) {
+    private void removeDarkening(CallbackInfo info) {
         if(!client.getWindow().isFullscreen()) info.cancel();
     }
 }
