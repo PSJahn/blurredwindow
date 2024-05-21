@@ -26,7 +26,7 @@ public abstract class WindowMixin {
     private void enableAcrylic(CallbackInfo info) {
         WinDef.HWND window = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(getHandle())));
 
-        Dwmapi.setBackdropType(window, Dwmapi.DWM_SYSTEMBACKDROP_TYPE.DWMSBT_TRANSIENTWINDOW);
+        Dwmapi.setAcrylicBackground(window);
         Dwmapi.setUseImmersiveDarkMode(window, true);
         Dwmapi.removeBorder(window);
     }
