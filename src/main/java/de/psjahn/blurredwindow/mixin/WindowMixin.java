@@ -24,10 +24,12 @@ public abstract class WindowMixin {
 
     @Inject(method = "<init>", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/glfw/GLFW;glfwCreateWindow(IILjava/lang/CharSequence;JJ)J", remap = false, shift = At.Shift.AFTER))
     private void enableAcrylic(CallbackInfo info) {
-        WinDef.HWND window = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(getHandle())));
+        if(GLFW.glfwGetPlatform() == GLFW.GLFW_PLATFORM_WIN32) {
+            WinDef.HWND window = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(getHandle())));
 
-        Dwmapi.setAcrylicBackground(window);
-        Dwmapi.setUseImmersiveDarkMode(window, true);
-        Dwmapi.removeBorder(window);
+            Dwmapi.setAcrylicBackground(window);
+            Dwmapi.setUseImmersiveDarkMode(window, true);
+            Dwmapi.removeBorder(window);
+        }
     }
 }
