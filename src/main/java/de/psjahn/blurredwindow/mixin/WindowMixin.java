@@ -3,6 +3,7 @@ package de.psjahn.blurredwindow.mixin;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef;
 import de.psjahn.blurredwindow.Dwmapi;
+import de.psjahn.blurredwindow.XLib;
 import net.minecraft.client.util.Window;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWNativeWayland;
@@ -15,6 +16,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.nio.ByteBuffer;
 
 @SuppressWarnings("unused")
 @Mixin(Window.class)
@@ -37,20 +40,14 @@ public abstract class WindowMixin {
         }else if(GLFW.glfwGetPlatform() == GLFW.GLFW_PLATFORM_X11) {
             // Linux (Xorg) - Unless mods like WayGL are used, Minecraft
             // on Linux will use xorg even on Wayland through xwayland.
+            // This is the equivalent of this command, using XLib:
+            // $ xprop -id <window> -f _KDE_NET_WM_BLUR_BEHIND_REGION 32c -set _KDE_NET_WM_BLUR_BEHIND_REGION 1
 
+            long display = GLFWNativeX11.glfwGetX11Display();
             long window = GLFWNativeX11.glfwGetX11Window(getHandle());
-            try {
-                // TODO: Use natively instead of via command
-                Runtime.getRuntime().exec(new String[]{
-                        "xprop",
-                        "-id", "" + window,
-                        "-f", "_KDE_NET_WM_BLUR_BEHIND_REGION",
-                        "32c",
-                        "-set", "_KDE_NET_WM_BLUR_BEHIND_REGION", "1",
-                });
-            }catch (Exception ex) {
-                LoggerFactory.getLogger("blurredwindow").error("Failed to run xprop to enable blur (might be KDE specific)", ex);
-            }
+            long property = XLib.INSTANCE.XInternAtom(display, "_KDE_NET_WM_BLUR_BEHIND_REGION", false);
+            byte[] data = new byte[]{ 0x00, 0x00, 0x00, 0x01 }; // Basically 1, but in 32 bit and passed as pointer to buffer "data"
+            long res = XLib.INSTANCE.XChangeProperty(display, window, property, XLib.XA_CARDINAL_ATOM, 32, 0, ByteBuffer.wrap(data), 1);
         }
     }
 }
