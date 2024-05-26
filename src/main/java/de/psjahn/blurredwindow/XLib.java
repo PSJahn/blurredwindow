@@ -2,10 +2,6 @@ package de.psjahn.blurredwindow;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.sun.jna.PointerType;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.ptr.IntByReference;
 
 import java.nio.ByteBuffer;
 
