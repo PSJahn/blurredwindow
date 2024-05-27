@@ -9,9 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("unused")
 @Mixin(AccessibilityOnboardingScreen.class)
-public class AccessibilityOnboardingScreenMixin {
-    @Inject(method = "renderPanoramaBackground", at = @At("HEAD"), cancellable = true)
-    private void removeBackground(CallbackInfo info) {
-        if(!MinecraftClient.getInstance().getWindow().isFullscreen()) info.cancel();
+public abstract class AccessibilityOnboardingScreenMixin {
+
+    @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
+    private void removeBackground(CallbackInfo ci) {
+        if(!MinecraftClient.getInstance().getWindow().isFullscreen()) ci.cancel();
     }
 }

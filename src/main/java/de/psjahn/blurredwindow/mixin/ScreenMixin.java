@@ -1,6 +1,7 @@
 package de.psjahn.blurredwindow.mixin;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,16 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("unused")
 @Mixin(Screen.class)
-public class ScreenMixin {
+public abstract class ScreenMixin {
     @Shadow @Nullable protected MinecraftClient client;
+    @Shadow public int width;
+    @Shadow public int height;
 
-    @Inject(method = "renderPanoramaBackground", at = @At("HEAD"), cancellable = true)
-    private void removeBackground(CallbackInfo info) {
-        if(!client.getWindow().isFullscreen()) info.cancel();
-    }
-
-    @Inject(method = "renderDarkening(Lnet/minecraft/client/gui/DrawContext;IIII)V", at = @At("HEAD"), cancellable = true)
-    private void removeDarkening(CallbackInfo info) {
-        if(!client.getWindow().isFullscreen()) info.cancel();
+    @Inject(method = "renderBackgroundTexture", at = @At(value = "HEAD"), cancellable = true)
+    private void removeBackgroundTexture(DrawContext context, CallbackInfo ci) {
+        if(!client.getWindow().isFullscreen()&&this.client.world == null) ci.cancel();
     }
 }

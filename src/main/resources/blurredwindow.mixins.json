@@ -9,9 +9,13 @@
 	},
 	"client": [
 		"AccessibilityOnboardingScreenMixin",
+		"CreateWorldScreenMixin",
+		"EntryListWidgetMixin",
 		"MinecraftClientMixin",
 		"ScreenMixin",
 		"SplashOverlayMixin",
+		"TabButtonWidgetMixin",
+		"TabNavigationWidgetMixin",
 		"TitleScreenMixin",
 		"WindowMixin"
 	]

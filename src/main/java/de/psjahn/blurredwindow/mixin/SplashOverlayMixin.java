@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @SuppressWarnings("unused")
 @Mixin(SplashOverlay.class)
-public class SplashOverlayMixin {
+public abstract class SplashOverlayMixin {
     @Shadow @Final private MinecraftClient client;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIII)V"))
