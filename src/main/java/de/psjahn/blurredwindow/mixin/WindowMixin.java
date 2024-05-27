@@ -29,22 +29,18 @@ public abstract class WindowMixin {
     @Inject(method = "<init>", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/glfw/GLFW;glfwCreateWindow(IILjava/lang/CharSequence;JJ)J", remap = false, shift = At.Shift.AFTER))
     private void enableAcrylic(CallbackInfo info) {
         if(GLFW.glfwGetPlatform() == GLFW.GLFW_PLATFORM_WIN32) {
+            //Windows 10/11 using DwmSetWindowAttribute
             WinDef.HWND window = new WinDef.HWND(new Pointer(GLFWNativeWin32.glfwGetWin32Window(getHandle())));
 
             Dwmapi.setAcrylicBackground(window);
             Dwmapi.setUseImmersiveDarkMode(window, true);
             Dwmapi.removeBorder(window);
         }else if(GLFW.glfwGetPlatform() == GLFW.GLFW_PLATFORM_X11) {
-            // Linux (Xorg) - Unless mods like WayGL are used, Minecraft
-            // on Linux will use xorg even on Wayland through xwayland.
-            // This is the equivalent of this command, using XLib:
-            // $ xprop -id <window> -f _KDE_NET_WM_BLUR_BEHIND_REGION 32c -set _KDE_NET_WM_BLUR_BEHIND_REGION 1
+            // Linux (Xorg) using _KDE_NET_WM_BLUR_BEHIND_REGION
 
             long display = GLFWNativeX11.glfwGetX11Display();
             long window = GLFWNativeX11.glfwGetX11Window(getHandle());
-            long property = XLib.INSTANCE.XInternAtom(display, "_KDE_NET_WM_BLUR_BEHIND_REGION", false);
-            byte[] data = new byte[]{ 0x00, 0x00, 0x00, 0x01 }; // Basically 1, but in 32 bit and passed as pointer to buffer "data"
-            long res = XLib.INSTANCE.XChangeProperty(display, window, property, XLib.XA_CARDINAL_ATOM, 32, 0, ByteBuffer.wrap(data), 1);
+            XLib.setBlurBehind(display, window, true);
         }
     }
 }
