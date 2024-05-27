@@ -7,6 +7,9 @@
 	"authors": [
 		"PSJahn"
 	],
+	"contributors": [
+		"@EnderKill98"
+	],
 	"license": "CC0-1.0",
 	"icon": "assets/blurredwindow/icon.png",
 	"environment": "*",
