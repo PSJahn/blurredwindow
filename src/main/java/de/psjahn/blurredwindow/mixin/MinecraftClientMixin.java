@@ -1,5 +1,7 @@
 package de.psjahn.blurredwindow.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -13,7 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("unused")
@@ -58,14 +59,14 @@ public class MinecraftClientMixin {
         GlStateManager._depthMask(true);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;draw(II)V"))
-    private void redirectRenderFramebuffer(Framebuffer framebuffer, int width, int height, boolean tick) {
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;draw(II)V"))
+    private void redirectRenderFramebuffer(Framebuffer framebuffer, int width, int height, Operation<Void> original, boolean tick) {
         RenderSystem.assertOnGameThreadOrInit();
         MinecraftClient client = MinecraftClient.getInstance();
         if (!client.skipGameRender && client.isFinishedLoading() && tick && client.world != null) {
             RenderSystem.clearColor(0, 0, 0, 1);
             RenderSystem.clear(GlConst.GL_COLOR_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
-            framebuffer.draw(width, height);
+            original.call(framebuffer, width, height);
         } else {
             if (!RenderSystem.isInInitPhase()) {
                 RenderSystem.recordRenderCall(() -> framebufferDrawInternalWithAlpha(framebuffer, width, height));
