@@ -2,7 +2,7 @@ package de.psjahn.blurredwindow.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.psjahn.blurredwindow.client.Identifiers;
+import de.psjahn.blurredwindow.BlurredWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.GridWidget;
@@ -34,9 +34,9 @@ public abstract class TabNavigationWidgetMixin {
             return;
         }
         RenderSystem.enableBlend();
-        context.drawTexture(Identifiers.HEADER_SEPARATOR_TEXTURE, 0, this.grid.getY() + this.grid.getHeight() - 2, 0.0f, 0.0f, this.tabButtons.get(0).getX(), 2, 32, 2);
+        context.drawTexture(BlurredWindow.HEADER_SEPARATOR_TEXTURE, 0, this.grid.getY() + this.grid.getHeight() - 2, 0.0f, 0.0f, this.tabButtons.get(0).getX(), 2, 32, 2);
         int i = this.tabButtons.get(this.tabButtons.size() - 1).getRight();
-        context.drawTexture(Identifiers.HEADER_SEPARATOR_TEXTURE, i, this.grid.getY() + this.grid.getHeight() - 2, 0.0f, 0.0f, this.tabNavWidth, 2, 32, 2);
+        context.drawTexture(BlurredWindow.HEADER_SEPARATOR_TEXTURE, i, this.grid.getY() + this.grid.getHeight() - 2, 0.0f, 0.0f, this.tabNavWidth, 2, 32, 2);
         RenderSystem.disableBlend();
     }
 }

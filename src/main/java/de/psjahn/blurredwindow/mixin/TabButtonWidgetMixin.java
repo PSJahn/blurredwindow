@@ -1,7 +1,7 @@
 package de.psjahn.blurredwindow.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.psjahn.blurredwindow.client.Identifiers;
+import de.psjahn.blurredwindow.BlurredWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -32,7 +32,7 @@ public abstract class TabButtonWidgetMixin extends ClickableWidget {
             return;
         }
         RenderSystem.enableBlend();
-        instance.drawGuiTexture(Identifiers.NEW_TAB_BUTTON_TEXTURES.get(this.isCurrentTab(), this.isSelected()), x, y, width, height);
+        instance.drawGuiTexture(BlurredWindow.NEW_TAB_BUTTON_TEXTURES.get(this.isCurrentTab(), this.isSelected()), x, y, width, height);
         RenderSystem.disableBlend();
     }
 
@@ -43,7 +43,7 @@ public abstract class TabButtonWidgetMixin extends ClickableWidget {
 
     @Unique
     void renderBackgroundTexture(DrawContext context, int left, int top, int right, int bottom) {
-        renderBackgroundTexture(context, Identifiers.MENU_BACKGROUND_TEXTURE, left, top, 0.0f, 0.0f, right - left, bottom - top);
+        renderBackgroundTexture(context, BlurredWindow.MENU_BACKGROUND_TEXTURE, left, top, 0.0f, 0.0f, right - left, bottom - top);
     }
 
     @Unique

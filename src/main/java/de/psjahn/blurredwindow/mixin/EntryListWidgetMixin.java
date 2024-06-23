@@ -1,7 +1,7 @@
 package de.psjahn.blurredwindow.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.psjahn.blurredwindow.client.Identifiers;
+import de.psjahn.blurredwindow.BlurredWindow;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ContainerWidget;
@@ -30,7 +30,7 @@ public abstract class EntryListWidgetMixin extends ContainerWidget {
 
     @ModifyArgs(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
     private void changeBackgroundTexture(Args args) {
-        if(!client.getWindow().isFullscreen()&&this.client.world == null) args.set(0, Identifiers.MENU_BACKGROUND_TEXTURE);
+        if(!client.getWindow().isFullscreen()&&this.client.world == null) args.set(0, BlurredWindow.MENU_BACKGROUND_TEXTURE);
     }
 
     @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fillGradient(Lnet/minecraft/client/render/RenderLayer;IIIIIII)V"))
@@ -39,8 +39,8 @@ public abstract class EntryListWidgetMixin extends ContainerWidget {
     @Inject(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fillGradient(Lnet/minecraft/client/render/RenderLayer;IIIIIII)V", ordinal = 1))
     private void renderHeaderAndFooterSeparators(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         RenderSystem.enableBlend();
-        Identifier identifier = this.client.world == null ? Identifiers.HEADER_SEPARATOR_TEXTURE : Identifiers.INWORLD_HEADER_SEPARATOR_TEXTURE;
-        Identifier identifier2 = this.client.world == null ? Identifiers.FOOTER_SEPARATOR_TEXTURE : Identifiers.INWORLD_FOOTER_SEPARATOR_TEXTURE;
+        Identifier identifier = this.client.world == null ? BlurredWindow.HEADER_SEPARATOR_TEXTURE : BlurredWindow.INWORLD_HEADER_SEPARATOR_TEXTURE;
+        Identifier identifier2 = this.client.world == null ? BlurredWindow.FOOTER_SEPARATOR_TEXTURE : BlurredWindow.INWORLD_FOOTER_SEPARATOR_TEXTURE;
         context.drawTexture(identifier, this.getX(), this.getY() - 2, 0.0f, 0.0f, this.getWidth(), 2, 32, 2);
         context.drawTexture(identifier2, this.getX(), this.getBottom(), 0.0f, 0.0f, this.getWidth(), 2, 32, 2);
         RenderSystem.disableBlend();
