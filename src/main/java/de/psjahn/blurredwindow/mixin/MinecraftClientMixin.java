@@ -2,7 +2,6 @@ package de.psjahn.blurredwindow.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
@@ -51,12 +50,6 @@ public class MinecraftClientMixin {
     private void redirectRenderFramebuffer(Framebuffer framebuffer, int width, int height, Operation<Void> original, boolean tick) {
         RenderSystem.assertOnRenderThreadOrInit();
         MinecraftClient client = MinecraftClient.getInstance();
-        if (!client.skipGameRender && client.isFinishedLoading() && tick && client.world != null) {
-            RenderSystem.clearColor(0, 0, 0, 0);
-            RenderSystem.clear(GlConst.GL_COLOR_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
-            original.call(framebuffer, width, height);
-        } else {
-            framebufferDrawInternalWithAlpha(framebuffer, width, height);
-        }
+        framebufferDrawInternalWithAlpha(framebuffer, width, height);
     }
 }
