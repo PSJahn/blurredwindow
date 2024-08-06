@@ -6,7 +6,7 @@ import com.sun.jna.Native;
 import java.nio.ByteBuffer;
 
 public interface XLib extends Library {
-    XLib INSTANCE = Native.load("libX11", XLib.class);
+    XLib INSTANCE = Native.load("X11", XLib.class);
 
     long XA_CARDINAL_ATOM = 6;
 
